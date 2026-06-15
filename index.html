@@ -953,17 +953,15 @@ function triggerInterested(btn) {
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  // 4 thin red pinstripes → white → blue with stars
+  // 3 thin red stripes → blue with stars
   const stripes = [
-    { color: '#BF0A30', w: 0.06 },
-    { color: null,      w: 0.03 },
-    { color: '#BF0A30', w: 0.06 },
-    { color: null,      w: 0.03 },
-    { color: '#BF0A30', w: 0.06 },
-    { color: null,      w: 0.03 },
-    { color: '#BF0A30', w: 0.06 },
-    { color: '#ffffff', w: 0.26 },
-    { color: '#002868', w: 0.50, stars: true },
+    { color: '#BF0A30', w: 0.07 },
+    { color: null,      w: 0.04 },
+    { color: '#BF0A30', w: 0.07 },
+    { color: null,      w: 0.04 },
+    { color: '#BF0A30', w: 0.07 },
+    { color: null,      w: 0.04 },
+    { color: '#002868', w: 0.60, stars: true },
   ];
 
   const slant     = H * 0.52;
