@@ -351,42 +351,30 @@ body {
   100% { transform: scale(1.2); }
 }
 
-/* I'M INTERESTED */
+/* INTERESTED */
 .interested-btn {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--blue); color: #fff; border: none;
-  border-radius: 20px; padding: 7px 14px; font-size: 13px; font-weight: 600;
-  cursor: pointer; margin-left: auto;
-  position: relative; overflow: hidden;
-  transition: transform 0.15s, background 0.3s;
-  isolation: isolate;
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: none; color: var(--blue);
+  font-size: 13px; font-weight: 600; padding: 6px 8px; border-radius: 6px;
+  cursor: pointer; transition: background 0.12s, color 0.12s;
+  position: relative;
 }
-.interested-btn canvas.flag-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-  z-index: 0;
-  pointer-events: none;
-}
-.interested-btn > *:not(canvas) { position: relative; z-index: 1; }
-.interested-btn.stripe-phase {
-  animation: btn-scale 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-.interested-btn:hover { transform: scale(1.03); }
-.interested-btn:active { transform: scale(0.97); }
+.interested-btn:hover { background: rgba(27,143,252,0.08); }
+.interested-btn:active { transform: scale(0.95); }
+.interested-btn svg { width: 18px; height: 18px; transition: transform 0.3s cubic-bezier(.36,1.56,.64,1); }
 
-.interested-btn.stripe-phase {
-  animation: stripe-sweep 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  background-size: 40px 100%;
+.flag-done {
+  width: 40px; height: 26px;
+  padding: 0; border: none; border-radius: 3px; cursor: default;
+  flex-shrink: 0;
+  background-image:
+    linear-gradient(#002868 0 54%, transparent 54%),
+    repeating-linear-gradient(to bottom, #BF0A30 0 7.7%, #fff 7.7% 15.4%);
+  background-size: 38% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
 }
-@keyframes btn-scale {
-  0%   { transform: scale(1);    background: var(--blue); }
-  10%  { transform: scale(1.06); background: var(--blue); }
-  80%  { transform: scale(1.02); background: var(--blue); }
-  100% { transform: scale(1);    background: var(--charcoal); }
-}
+
 /* comment fill on hover */
 .action-btn.comment-btn:hover {
   color: var(--text);
@@ -400,16 +388,7 @@ body {
   transition: fill 0.2s ease;
 }
 
-/* repost spin on click */
-@keyframes repost-spin {
-  0%   { transform: rotate(0deg) scale(1); }
-  40%  { transform: rotate(200deg) scale(1.2); }
-  70%  { transform: rotate(340deg) scale(1.05); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-.action-btn.repost-btn.spinning svg {
-  animation: repost-spin 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
-}
+
 
 /* PARTICLES */
 .particle {
@@ -676,13 +655,9 @@ body {
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 10c0 3.866-3.134 7-7 7a6.95 6.95 0 01-3.5-.94L3 17l.94-3.5A6.95 6.95 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
             3
           </button>
-          <button class="action-btn repost-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
-            7
-          </button>
-          <button class="interested-btn" onclick="triggerInterested(this)">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 10l2.5 2.5L15 7"/></svg>
-            I'm Interested
+          <button class="action-btn interested-btn" onclick="triggerInterested(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><line x1="5" y1="2" x2="5" y2="18"/><path d="M5 2 C8 1 12 4 16 2 L16 9 C12 11 8 8 5 9 Z"/></svg>
+            Interested
           </button>
         </div>
       </div>
@@ -712,9 +687,9 @@ body {
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 10c0 3.866-3.134 7-7 7a6.95 6.95 0 01-3.5-.94L3 17l.94-3.5A6.95 6.95 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
             12
           </button>
-          <button class="action-btn repost-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
-            19
+          <button class="action-btn interested-btn" onclick="triggerInterested(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><line x1="5" y1="2" x2="5" y2="18"/><path d="M5 2 C8 1 12 4 16 2 L16 9 C12 11 8 8 5 9 Z"/></svg>
+            Interested
           </button>
           <button class="action-btn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
@@ -763,13 +738,9 @@ body {
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 10c0 3.866-3.134 7-7 7a6.95 6.95 0 01-3.5-.94L3 17l.94-3.5A6.95 6.95 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
             5
           </button>
-          <button class="action-btn repost-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
-            8
-          </button>
-          <button class="interested-btn" onclick="triggerInterested(this)">
-            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 10l2.5 2.5L15 7"/></svg>
-            I'm Interested
+          <button class="action-btn interested-btn" onclick="triggerInterested(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><line x1="5" y1="2" x2="5" y2="18"/><path d="M5 2 C8 1 12 4 16 2 L16 9 C12 11 8 8 5 9 Z"/></svg>
+            Interested
           </button>
         </div>
       </div>
@@ -813,9 +784,9 @@ body {
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 10c0 3.866-3.134 7-7 7a6.95 6.95 0 01-3.5-.94L3 17l.94-3.5A6.95 6.95 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
             21
           </button>
-          <button class="action-btn repost-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
-            34
+          <button class="action-btn interested-btn" onclick="triggerInterested(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><line x1="5" y1="2" x2="5" y2="18"/><path d="M5 2 C8 1 12 4 16 2 L16 9 C12 11 8 8 5 9 Z"/></svg>
+            Interested
           </button>
           <button class="action-btn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
@@ -860,9 +831,9 @@ body {
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 10c0 3.866-3.134 7-7 7a6.95 6.95 0 01-3.5-.94L3 17l.94-3.5A6.95 6.95 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
             9
           </button>
-          <button class="action-btn repost-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
-            11
+          <button class="action-btn interested-btn" onclick="triggerInterested(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><line x1="5" y1="2" x2="5" y2="18"/><path d="M5 2 C8 1 12 4 16 2 L16 9 C12 11 8 8 5 9 Z"/></svg>
+            Interested
           </button>
           <button class="action-btn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
@@ -903,9 +874,9 @@ body {
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 10c0 3.866-3.134 7-7 7a6.95 6.95 0 01-3.5-.94L3 17l.94-3.5A6.95 6.95 0 013 10c0-3.866 3.134-7 7-7s7 3.134 7 7z"/></svg>
             4
           </button>
-          <button class="action-btn repost-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
-            6
+          <button class="action-btn interested-btn" onclick="triggerInterested(this)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><line x1="5" y1="2" x2="5" y2="18"/><path d="M5 2 C8 1 12 4 16 2 L16 9 C12 11 8 8 5 9 Z"/></svg>
+            Interested
           </button>
           <button class="action-btn">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
@@ -1005,62 +976,73 @@ function triggerInterested(btn) {
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  const stripes = ['#E8342A','#ffffff','#E8342A','#ffffff','#E8342A'];
-  const totalDuration = 1400;
+  // 13-stripe American flag colours (red on odd rows, white on even)
+  const stripeColors = Array.from({length: 13}, (_, i) => i % 2 === 0 ? '#BF0A30' : '#fff');
+  const totalDuration = 1100;
   let startTime = null;
 
-  function easeInOut(t) {
-    return t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
-  }
+  function easeInOut(t) { return t < 0.5 ? 2*t*t : -1+(4-2*t)*t; }
 
   function drawFrame(ts) {
     if (!startTime) startTime = ts;
     const elapsed = ts - startTime;
     const progress = Math.min(elapsed / totalDuration, 1);
 
-    // Phase: 0–0.15 ramp in, 0.15–0.80 full warp, 0.80–1.0 ramp out
+    // Subtle ramp: peaks at 40% then settles
     let warpStrength;
-    if (progress < 0.15) {
-      warpStrength = easeInOut(progress / 0.15);
-    } else if (progress < 0.80) {
+    if (progress < 0.25) {
+      warpStrength = easeInOut(progress / 0.25);
+    } else if (progress < 0.65) {
       warpStrength = 1;
     } else {
-      warpStrength = easeInOut(1 - (progress - 0.80) / 0.20);
+      warpStrength = easeInOut(1 - (progress - 0.65) / 0.35);
     }
 
-    const waveAmp  = H * 0.28 * warpStrength;  // vertical ripple amplitude
-    const waveFreq = 2.8;                        // wave cycles across width
-    const waveSpeed = elapsed / 280;             // speed of wave travel
+    const waveAmp   = H * 0.18 * warpStrength;
+    const waveFreq  = 2.2;
+    const waveSpeed = elapsed / 320;
+    const stripeH   = H / 13;
+    const colW      = 2;
 
     ctx.clearRect(0, 0, W, H);
 
-    // Draw the flag stripe by stripe, column by column
-    // Each column is offset vertically by a sine wave — this makes the whole button ripple
-    const colW = 2;
+    // Draw 13 stripes column-by-column with sine wave
     for (let x = 0; x <= W; x += colW) {
       const phase = (x / W) * Math.PI * waveFreq - waveSpeed;
       const waveY = Math.sin(phase) * waveAmp;
-
-      // How tall each stripe is at this x column (slightly compressed/stretched by wave)
-      const stripeH = H / stripes.length;
-
-      for (let s = 0; s < stripes.length; s++) {
+      for (let s = 0; s < 13; s++) {
         const y0 = s * stripeH + waveY;
-
-        // Clip to button bounds
         const clipTop    = Math.max(0, y0);
         const clipBottom = Math.min(H, y0 + stripeH);
         if (clipBottom <= clipTop) continue;
-
-        ctx.fillStyle = stripes[s];
+        ctx.fillStyle = stripeColors[s];
         ctx.fillRect(x, clipTop, colW, clipBottom - clipTop);
       }
     }
 
-    // Rounded rect clip so it stays inside the button shape
+    // Blue canton — top-left, covers 7 stripes tall, 40% wide
+    const cantonW = W * 0.40;
+    const cantonH = stripeH * 7;
+    const cantonY = Math.sin(-waveSpeed) * waveAmp;
+    ctx.fillStyle = '#002868';
+    ctx.fillRect(0, cantonY, cantonW, cantonH);
+
+    // Star dots in canton (3×4 grid)
+    ctx.fillStyle = '#fff';
+    for (let r = 0; r < 3; r++) {
+      for (let c = 0; c < 4; c++) {
+        const sx = (cantonW / 5) * (c + 1);
+        const sy = cantonY + (cantonH / 4) * (r + 1);
+        ctx.beginPath();
+        ctx.arc(sx, sy, 1.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Clip to button shape (rounded rect)
     ctx.globalCompositeOperation = 'destination-in';
     ctx.beginPath();
-    ctx.roundRect(0, 0, W, H, 20);
+    ctx.roundRect(0, 0, W, H, 8);
     ctx.fillStyle = '#000';
     ctx.fill();
     ctx.globalCompositeOperation = 'source-over';
@@ -1069,22 +1051,21 @@ function triggerInterested(btn) {
       requestAnimationFrame(drawFrame);
     } else {
       canvas.remove();
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 10l4 4 8-8"/></svg> Interested`;
-      btn.style.background = '#1A1A1A';
-      btn.style.color = '#fff';
+      // Button becomes a mini static American flag
+      btn.className = 'flag-done';
+      btn.style.cssText = '';
+      btn.innerHTML = '';
     }
   }
 
   requestAnimationFrame(drawFrame);
 
-  // Hide the original button text during animation
   btn.style.color = 'transparent';
   btn.style.background = 'transparent';
 
-  // Confetti at peak warp
   setTimeout(() => {
-    spawnParticles(btn, ['#E8342A','#ffffff','#1B8FFC','#FF6B6B'], 22, 'confetti');
-  }, 500);
+    spawnParticles(btn, ['#BF0A30','#fff','#002868','#FF6B6B'], 16, 'confetti');
+  }, 420);
 }
 
 // ── PARTICLE ENGINE ──
@@ -1118,16 +1099,6 @@ function spawnParticles(el, colors, count, type) {
     setTimeout(() => p.remove(), dur * 1000 + 100);
   }
 }
-
-// ── REPOST SPIN ──
-document.querySelectorAll('.repost-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    btn.classList.remove('spinning');
-    void btn.offsetWidth;
-    btn.classList.add('spinning');
-    setTimeout(() => btn.classList.remove('spinning'), 520);
-  });
-});
 
 // ── CAROUSEL ──
 const carouselPos = {};
