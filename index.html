@@ -363,16 +363,10 @@ body {
 .interested-btn:active { transform: scale(0.95); }
 .interested-btn svg { width: 18px; height: 18px; transition: transform 0.3s cubic-bezier(.36,1.56,.64,1); }
 
-.flag-done {
-  width: 40px; height: 26px;
-  padding: 0; border: none; border-radius: 3px; cursor: default;
-  flex-shrink: 0;
-  background-image:
-    linear-gradient(#002868 0 54%, transparent 54%),
-    repeating-linear-gradient(to bottom, #BF0A30 0 7.7%, #fff 7.7% 15.4%);
-  background-size: 38% 100%, 100% 100%;
-  background-repeat: no-repeat;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+.interested-btn.flagged {
+  background: var(--charcoal);
+  color: #fff;
+  cursor: default;
 }
 
 /* comment fill on hover */
@@ -1111,10 +1105,9 @@ function triggerInterested(btn) {
       requestAnimationFrame(drawFrame);
     } else {
       canvas.remove();
-      // Button becomes a mini static American flag
-      btn.className = 'flag-done';
       btn.style.cssText = '';
-      btn.innerHTML = '';
+      btn.classList.add('flagged');
+      btn.innerHTML = `<svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor"><line x1="4" y1="2" x2="4" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="4" y="2" width="14" height="9"/></svg> Interested`;
     }
   }
 
