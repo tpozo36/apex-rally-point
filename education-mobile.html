@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Education — Rally Point</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F7F5F0;
+  --surface: #ffffff;
+  --blue: #1B8FFC;
+  --blue-light: #E8F3FF;
+  --charcoal: #1A1A1A;
+  --charcoal-mid: #3A3A3A;
+  --border: #E2DED7;
+  --text: #1A1A1A;
+  --text-2: #5A5A5A;
+  --text-3: #9A9A9A;
+  --red: #E8342A;
+  --green: #1F9D55;
+  --bottom-nav-h: 60px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* PAGE */
+.page {
+  padding: 16px 16px calc(var(--bottom-nav-h) + 24px + env(safe-area-inset-bottom));
+  max-width: 100%;
+}
+
+/* SHARED REVEAL — matches feed stagger */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* PROGRESS HEADER */
+.progress-header {
+  padding: 8px 0 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.welcome {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+.overall-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.overall-bar {
+  flex: 1;
+  height: 9px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.overall-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  width: 0%;
+  transition: width 0.6s cubic-bezier(.4,.0,.2,1);
+}
+.overall-pct {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-2);
+  min-width: 48px;
+  text-align: right;
+}
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.stat-label {
+  font-size: 14px;
+  color: var(--text-2);
+  font-weight: 500;
+}
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+  letter-spacing: -0.2px;
+}
+
+/* MODULE TILES — full width, stacked */
+.module-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 0 8px;
+}
+.module-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.module-tile-strip {
+  height: 86px;
+  background: var(--tile-color, var(--blue));
+  position: relative;
+}
+.module-tile-status-pill {
+  position: absolute;
+  top: 12px; left: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.92);
+  color: var(--tile-color, var(--blue));
+  padding: 4px 9px;
+  border-radius: 4px;
+}
+.module-tile-strip-lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.92);
+}
+.module-tile-strip-lock svg { width: 34px; height: 34px; }
+.module-tile-body {
+  padding: 16px 18px 14px;
+  flex: 1;
+}
+.module-tile-title {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.15px;
+  color: var(--tile-color, var(--blue));
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+.module-tile-subtitle {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+.module-tile-progress {
+  height: 5px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.module-tile-progress-fill {
+  height: 100%;
+  background: var(--tile-color, var(--blue));
+  transition: width 0.6s cubic-bezier(.4,.0,.2,1);
+}
+.module-tile-progress-text {
+  font-size: 13px;
+  color: var(--text-3);
+  font-weight: 600;
+}
+.module-tile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 18px 18px;
+}
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+  font-family: inherit;
+  width: 100%;
+  min-height: 48px;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:active { opacity: 0.85; }
+.btn-secondary { background: var(--charcoal); color: #fff; }
+.btn-secondary:active { opacity: 0.85; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.module-tile.locked .module-tile-title,
+.module-tile.locked .module-tile-progress-text { color: var(--text-3); }
+.module-tile.locked .module-tile-progress-fill { background: var(--text-3); }
+.module-tile.locked .btn { opacity: 0.45; pointer-events: none; }
+
+/* FLASHCARD ROW — full-width snap scroll */
+.section-heading {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.1px;
+  margin: 24px 0 12px;
+  color: var(--text);
+}
+.flashcard-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 0 14px;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 16px;
+  margin: 0 -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.flashcard-row::-webkit-scrollbar { display: none; }
+.deck-card {
+  flex: 0 0 calc(100% - 0px);
+  min-height: 160px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scroll-snap-align: start;
+}
+.deck-card-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.1px;
+  line-height: 1.3;
+}
+.deck-card-meta {
+  font-size: 13px;
+  color: var(--text-2);
+  margin-top: 8px;
+}
+.deck-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  background: #E4F5EC;
+  padding: 4px 10px;
+  border-radius: 4px;
+  align-self: flex-start;
+  margin-top: 12px;
+}
+.deck-card.locked { background: #F5F4EF; cursor: not-allowed; }
+.deck-card.locked .deck-card-title,
+.deck-card.locked .deck-card-meta { color: var(--text-3); }
+
+/* BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--bottom-nav-h);
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--charcoal);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  z-index: 200;
+}
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #888;
+  text-decoration: none;
+  font-size: 10px;
+  font-weight: 600;
+  flex: 1;
+  height: 100%;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.15s;
+  letter-spacing: 0.02em;
+}
+.bottom-nav-item:active,
+.bottom-nav-item.active { color: var(--blue); }
+.bottom-nav-item svg { width: 22px; height: 22px; }
+
+/* MODAL — full screen on mobile */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 100;
+  display: none;
+  backdrop-filter: blur(4px);
+}
+.modal.open { display: block; }
+.modal-card {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100dvh;
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+}
+.modal-close {
+  position: absolute;
+  top: calc(14px + env(safe-area-inset-top));
+  right: 14px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 38px; height: 38px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: background 0.15s;
+}
+
+/* SLIDE DECK MODAL */
+.slide-body {
+  padding: calc(54px + env(safe-area-inset-top)) 24px 16px;
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.slide-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+.slide-headline {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+.slide-text {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 18px;
+}
+.slide-callout {
+  background: var(--blue-light);
+  border-left: 3px solid var(--blue);
+  padding: 14px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  margin-top: 14px;
+}
+.slide-callout strong { color: var(--blue); font-weight: 800; }
+.slide-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.slide-arrow {
+  background: none;
+  border: 1.5px solid var(--border);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-2);
+  font-size: 22px;
+  transition: border-color 0.15s, color 0.15s;
+}
+.slide-arrow:active:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+.slide-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.slide-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.slide-counter {
+  font-size: 14px;
+  color: var(--text-2);
+  font-weight: 700;
+}
+.slide-download {
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+}
+.slide-download svg { width: 14px; height: 14px; }
+
+/* QUIZ MODAL */
+.quiz-progress-track {
+  height: 4px;
+  background: var(--border);
+  width: 100%;
+  position: absolute;
+  top: 0; left: 0;
+}
+.quiz-progress-fill {
+  height: 100%;
+  background: var(--blue);
+  width: 0%;
+  transition: width 0.4s ease;
+}
+.quiz-body {
+  padding: calc(54px + env(safe-area-inset-top)) 22px calc(22px + env(safe-area-inset-bottom));
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.quiz-q-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+.quiz-question {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  line-height: 1.35;
+  margin-bottom: 22px;
+  color: var(--text);
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.quiz-option {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text);
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  line-height: 1.4;
+}
+.quiz-option:active:not(:disabled) { border-color: var(--blue); background: var(--blue-light); }
+.quiz-option:disabled { cursor: default; }
+.quiz-option-letter {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-2);
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.quiz-option.correct { border-color: var(--green); background: #E4F5EC; }
+.quiz-option.correct .quiz-option-letter { background: var(--green); color: #fff; }
+.quiz-option.wrong { border-color: var(--red); background: #FFECEB; }
+.quiz-option.wrong .quiz-option-letter { background: var(--red); color: #fff; }
+
+.quiz-result {
+  text-align: center;
+  padding: 20px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.quiz-score {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--blue);
+  line-height: 1;
+  letter-spacing: -1.5px;
+}
+.quiz-score-label {
+  font-size: 15px;
+  color: var(--text-2);
+  margin-top: 8px;
+  font-weight: 500;
+}
+.quiz-result-message {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 28px 0 8px;
+  letter-spacing: -0.1px;
+}
+.quiz-result-detail {
+  font-size: 14px;
+  color: var(--text-2);
+  margin-bottom: 30px;
+}
+.quiz-result-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 8px;
+}
+
+/* FLASHCARD MODAL */
+.flashcard-body {
+  padding: calc(54px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.flashcard-deck-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 24px;
+  text-align: center;
+}
+.flashcard-stage {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 3/4;
+  margin-bottom: 24px;
+}
+.flashcard-flipper {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,.0,.2,1);
+  cursor: pointer;
+}
+.flashcard-flipper.flipped { transform: rotateY(180deg); }
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 28px;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+.flashcard-face.back {
+  transform: rotateY(180deg);
+  background: var(--charcoal);
+  color: #fff;
+  border-color: var(--charcoal);
+}
+.flashcard-face-eyebrow {
+  position: absolute;
+  top: 16px; left: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.flashcard-face.back .flashcard-face-eyebrow { color: rgba(255,255,255,0.5); }
+.flashcard-term {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.flashcard-def {
+  font-size: 17px;
+  line-height: 1.55;
+  color: #fff;
+  font-weight: 500;
+}
+.flashcard-hint {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 18px;
+}
+.flashcard-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.flashcard-counter {
+  font-size: 14px;
+  color: var(--text-2);
+  font-weight: 700;
+  min-width: 60px;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- MAIN -->
+<div class="page">
+
+  <!-- PROGRESS HEADER -->
+  <div class="progress-header reveal">
+    <h1 class="welcome">Welcome back,<br>Yvonne</h1>
+    <div class="overall-row">
+      <div class="overall-bar"><div class="overall-bar-fill" id="overallFill"></div></div>
+      <div class="overall-pct" id="overallPct">0%</div>
+    </div>
+    <div class="stats-column">
+      <div class="stat">
+        <div class="stat-label">Modules Completed</div>
+        <div class="stat-value" id="statModules">0 / 4</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Quizzes Passed</div>
+        <div class="stat-value" id="statQuizzes">0 / 4</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Decks Mastered</div>
+        <div class="stat-value" id="statDecks">0 / 4</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE TILES — rendered by JS -->
+  <div class="module-list" id="moduleList"></div>
+
+  <!-- FLASHCARD ROW -->
+  <h2 class="section-heading reveal">Flashcard Decks</h2>
+  <div class="flashcard-row reveal" id="flashcardRow"></div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a class="bottom-nav-item" href="index.html">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10L10 3l7 7"/><path d="M5 8.5V17h4v-4h2v4h4V8.5"/></svg>
+    Home
+  </a>
+  <a class="bottom-nav-item" href="#">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="6"/><line x1="13.5" y1="13.5" x2="17" y2="17"/></svg>
+    Search
+  </a>
+  <a class="bottom-nav-item active" href="education-mobile.html">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M1 7l9-4 9 4-9 4-9-4z"/><path d="M5 9v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V9"/></svg>
+    Education
+  </a>
+  <a class="bottom-nav-item" href="#">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h14M3 10h10M3 15h7"/></svg>
+    Messages
+  </a>
+  <a class="bottom-nav-item" href="#">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="7" r="4"/><path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6"/></svg>
+    Profile
+  </a>
+</nav>
+
+<!-- SLIDE DECK MODAL -->
+<div class="modal" id="slideModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('slideModal')">×</button>
+    <div class="slide-body" id="slideBody"></div>
+    <div class="slide-controls">
+      <button class="slide-arrow" id="slidePrev" onclick="navSlide(-1)">‹</button>
+      <div class="slide-meta">
+        <span class="slide-counter" id="slideCounter">1 / 1</span>
+        <button class="slide-download" onclick="downloadSlides()">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3v10M5 9l5 5 5-5"/><path d="M3 17h14"/></svg>
+          PDF
+        </button>
+      </div>
+      <button class="slide-arrow" id="slideNext" onclick="navSlide(1)">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ MODAL -->
+<div class="modal" id="quizModal">
+  <div class="modal-card">
+    <div class="quiz-progress-track"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+    <button class="modal-close" onclick="closeModal('quizModal')">×</button>
+    <div class="quiz-body" id="quizBody"></div>
+  </div>
+</div>
+
+<!-- FLASHCARD MODAL -->
+<div class="modal" id="flashcardModal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal('flashcardModal')">×</button>
+    <div class="flashcard-body">
+      <div class="flashcard-deck-title" id="flashcardDeckTitle">Deck</div>
+      <div class="flashcard-stage">
+        <div class="flashcard-flipper" id="flashcardFlipper" onclick="flipCard()">
+          <div class="flashcard-face">
+            <span class="flashcard-face-eyebrow">Term</span>
+            <div class="flashcard-term" id="flashcardTerm">—</div>
+          </div>
+          <div class="flashcard-face back">
+            <span class="flashcard-face-eyebrow">Definition</span>
+            <div class="flashcard-def" id="flashcardDef">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-hint">Tap the card to flip</div>
+      <div class="flashcard-controls">
+        <button class="slide-arrow" id="flashcardPrev" onclick="navCard(-1)">‹</button>
+        <div class="flashcard-counter" id="flashcardCounter">1 / 1</div>
+        <button class="slide-arrow" id="flashcardNext" onclick="navCard(1)">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA (identical to education.html) ──
+const MODULES = [
+  {
+    id: 'm1',
+    title: 'Corporate Finance Fundamentals',
+    subtitle: 'Read a P&L, balance sheet, and cash flow with confidence.',
+    color: '#1B5FAD',
+    locked: false,
+    slides: [
+      { eyebrow: 'Module 1 · Slide 1', headline: 'Why Finance Speaks for You', body: 'Every business decision is a financial decision in disguise. Promotions, project approvals, and strategic bets all get judged through one lens — does the math work? Even if you\'re never the one running the models, your ability to engage with finance fluently determines whether your ideas get heard.', callout: '<strong>78%</strong> of senior leaders cite financial literacy as the single biggest predictor of advancement beyond middle management.' },
+      { eyebrow: 'Module 1 · Slide 2', headline: 'The Three Statements', body: 'Every company\'s financial reality lives in three documents. The Income Statement (P&L) shows performance over a period — what you earned and what it cost. The Balance Sheet shows position at a single moment — what you own, what you owe, what\'s left. The Cash Flow Statement shows movement — where dollars actually went.' },
+      { eyebrow: 'Module 1 · Slide 3', headline: 'Reading a P&L', body: 'Top line is revenue. Subtract Cost of Goods Sold (COGS) to get Gross Profit — what\'s left after the cost of producing what you sell. Then subtract operating expenses (sales, marketing, G&A, R&D) to get Operating Income, or EBIT. Strip out interest and taxes, and you have Net Income — the bottom line.', callout: 'EBITDA adds Depreciation and Amortization back to EBIT. It\'s the language investors speak when comparing companies.' },
+      { eyebrow: 'Module 1 · Slide 4', headline: 'The Balance Sheet Equation', body: 'Assets = Liabilities + Equity. Everything a company owns either belongs to creditors (debt, accounts payable, leases) or to owners (paid-in capital, retained earnings). Memorize this. Every transaction either shifts dollars between asset accounts, between liabilities and equity, or grows one side and matches it on the other.' },
+      { eyebrow: 'Module 1 · Slide 5', headline: 'Cash Is Truth', body: 'Earnings can be massaged. Cash cannot. The Cash Flow Statement reconciles Net Income back to actual cash movement, broken into Operating, Investing, and Financing activities. Free Cash Flow — operating cash flow minus capex — is what\'s left for shareholders, debt repayment, or reinvestment.', callout: '<strong>Profitable</strong> companies go bankrupt every year. <strong>Cash-positive</strong> ones rarely do.' },
+      { eyebrow: 'Module 1 · Slide 6', headline: 'Valuation in Two Numbers', body: 'Market Cap = Share Price × Shares Outstanding. Enterprise Value = Market Cap + Debt − Cash. That\'s the price tag to acquire the whole business. Divide by EBITDA, Revenue, or Earnings, and you have a multiple — the shorthand investors use to compare companies of any size or sector.' }
+    ],
+    quiz: [
+      { q: 'Which statement reports a company\'s financial position at a single point in time?', options: ['Income Statement', 'Balance Sheet', 'Cash Flow Statement', 'Statement of Retained Earnings'], correct: 1 },
+      { q: 'EBITDA primarily measures:', options: ['Net income', 'Operating performance before non-cash and capital-structure items', 'Free cash flow', 'Gross margin'], correct: 1 },
+      { q: 'The fundamental accounting equation is:', options: ['Revenue = Profit + Expenses', 'Assets = Liabilities + Equity', 'Cash Flow = Net Income − Capex', 'Equity = Assets − Revenue'], correct: 1 },
+      { q: 'Free Cash Flow equals:', options: ['Net Income + Depreciation', 'Revenue − COGS', 'Operating Cash Flow − Capital Expenditure', 'EBITDA − Interest'], correct: 2 },
+      { q: 'Enterprise Value equals:', options: ['Market Cap + Debt − Cash', 'Market Cap × P/E Ratio', 'Total Assets − Total Liabilities', 'Revenue × Industry Multiple'], correct: 0 }
+    ],
+    flashcards: [
+      { term: 'EBITDA', def: 'Earnings Before Interest, Taxes, Depreciation & Amortization. A proxy for operating cash flow that strips out capital structure and non-cash items.' },
+      { term: 'Gross Margin', def: '(Revenue − COGS) ÷ Revenue. How much of every dollar of sales is left after producing the product.' },
+      { term: 'Working Capital', def: 'Current Assets − Current Liabilities. Cash and near-cash needed to run day-to-day operations.' },
+      { term: 'Free Cash Flow', def: 'Operating Cash Flow − Capital Expenditure. The cash available to pay down debt, return to shareholders, or reinvest.' },
+      { term: 'Enterprise Value', def: 'Market Cap + Debt − Cash. The total cost to acquire the entire business, debt-free.' },
+      { term: 'P/E Ratio', def: 'Share Price ÷ Earnings Per Share. The multiple investors are willing to pay for $1 of current earnings.' }
+    ]
+  },
+  {
+    id: 'm2',
+    title: 'Business Communication & Presence',
+    subtitle: 'Speak so you get heard, write so you get read.',
+    color: '#B5451B',
+    locked: false,
+    slides: [
+      { eyebrow: 'Module 2 · Slide 1', headline: 'Speak So You Get Heard', body: 'In any room with more than three people, attention is the scarcest resource. The professionals who advance aren\'t the ones who talk most — they\'re the ones whose words land. That comes down to two skills: choosing your moment and structuring your point.', callout: 'The average executive forms a judgment about a speaker\'s competence within <strong>7 seconds</strong>.' },
+      { eyebrow: 'Module 2 · Slide 2', headline: 'The 30-Second Frame', body: 'Any time you have to speak up, lead with the ask. Then the why. Then the next step. "I\'d like to push our launch by two weeks. The data team needs more time to validate the segment model. If you\'re aligned, I\'ll send the updated timeline by Friday." That\'s it. Practice this until it\'s reflex.' },
+      { eyebrow: 'Module 2 · Slide 3', headline: 'Email That Gets Read', body: 'Subject lines are headlines, not labels. "Quick question" loses. "15 min Wed to review Q3 ad spend?" wins. Open with the ask in one sentence. Provide context in the second paragraph, never the first. Close with a clear next step and a date.', callout: 'Emails with a specific, time-bound ask in the first line get a <strong>3×</strong> higher response rate.' },
+      { eyebrow: 'Module 2 · Slide 4', headline: 'Slide Hygiene', body: 'One idea per slide. If you can\'t summarize the slide in five words, split it. The headline should be the takeaway, not the topic. "Q3 Revenue" is a topic. "Q3 Revenue beat plan by 12%" is a takeaway. Executives skim — your headline is often all they read.' },
+      { eyebrow: 'Module 2 · Slide 5', headline: 'Executive Presence', body: 'Presence isn\'t volume or polish. It\'s composure. The ability to pause before answering. To say "I don\'t know — I\'ll find out" without flinching. To match the energy of the room without performing. People trust calm. They follow calm. Become the calmest person in the meeting.', callout: 'A <strong>1-second</strong> pause before responding reads as confident; a <strong>2-second</strong> pause reads as wise.' }
+    ],
+    quiz: [
+      { q: 'The "30-Second Frame" leads with:', options: ['Background context', 'The ask', 'A relevant anecdote', 'Disclaimers'], correct: 1 },
+      { q: 'Best subject line for requesting a 1:1?', options: ['"Quick question"', '"Hey"', '"15 min Wed for Q3 review?"', '"Meeting?"'], correct: 2 },
+      { q: 'Executive presence is mostly about:', options: ['Speaking the most in the room', 'Composure under pressure', 'Always speaking last', 'Industry credentials'], correct: 1 },
+      { q: 'When you make a visible mistake in front of leadership:', options: ['Quietly correct it later', 'Acknowledge it directly and propose the fix', 'Defend the original choice', 'Wait for someone else to notice'], correct: 1 },
+      { q: 'A slide headline should communicate:', options: ['The topic', 'The takeaway', 'The data source', 'The agenda item'], correct: 1 }
+    ],
+    flashcards: [
+      { term: '30-Second Frame', def: 'Lead with the ask, then the why, then the next step. Structure for any verbal pitch under a minute.' },
+      { term: 'BLUF', def: 'Bottom Line Up Front. Open written communication with the conclusion or the ask, not the context.' },
+      { term: 'Active Listening', def: 'Confirming the speaker\'s intent before responding. Reduces miscommunication and builds trust.' },
+      { term: 'STAR Method', def: 'Situation, Task, Action, Result. Standard structure for behavioral interview answers.' },
+      { term: 'Mirror Technique', def: 'Repeating someone\'s last few words back to draw out more detail without interrogating.' },
+      { term: 'Executive Presence', def: 'Composure, conciseness, and calibrated energy. The non-content layer of how you communicate.' }
+    ]
+  },
+  {
+    id: 'm3',
+    title: 'Organizational Structure & Culture',
+    subtitle: 'Read the wiring of any company in the first 30 days.',
+    color: '#2D6A4F',
+    locked: false,
+    slides: [
+      { eyebrow: 'Module 3 · Slide 1', headline: 'Structure Shapes Behavior', body: 'How a company is wired determines how decisions get made, how information flows, and who gets credit. Strategy fails not because the plan was wrong but because the structure couldn\'t carry it. Before you advocate for a new initiative, understand the structural friction it will face.', callout: '<strong>70%</strong> of strategy failures trace back to structural misalignment, not strategic error.' },
+      { eyebrow: 'Module 3 · Slide 2', headline: 'The Major Patterns', body: 'Functional orgs group people by skill — all engineers in one org, all marketers in another. Efficient and easy to scale, but slow to coordinate across functions. Divisional orgs group by product, geography, or customer. They move faster on outcomes but duplicate overhead. Matrix orgs blend both — power, but also pain.' },
+      { eyebrow: 'Module 3 · Slide 3', headline: 'Matrix Reality', body: 'In a matrix, you report to a functional manager (your skill home) and a project or product lead (your work home). The promise is fast cross-functional collaboration. The reality is conflicting priorities, ambiguous accountability, and constant negotiation. Matrices work when leaders coordinate well. They break when they don\'t.' },
+      { eyebrow: 'Module 3 · Slide 4', headline: 'Culture Is Behavior', body: 'Culture isn\'t the values on the wall. It\'s what gets rewarded and what gets ignored. Watch what behaviors lead to promotion. Watch what behaviors are quietly tolerated. Watch how the company handles its mistakes. That\'s the real culture — and it\'s the one new hires read within their first 30 days.', callout: 'When stated values and rewarded behaviors diverge, employees trust the <strong>behaviors</strong>.' },
+      { eyebrow: 'Module 3 · Slide 5', headline: 'When Structure Needs to Change', body: 'The clearest signal: the same decisions keep getting stuck. Coordination meetings multiply. Approvals chain through three levels for routine calls. Cross-functional projects miss deadlines without a clear owner. When that pattern shows up, no amount of process will fix it. The wiring has to change.' }
+    ],
+    quiz: [
+      { q: 'Matrix structures are best for:', options: ['Companies under 10 people', 'Single-product companies', 'High cross-functional coordination needs', 'Pure efficiency focus'], correct: 2 },
+      { q: 'A functional org structure groups people by:', options: ['Geography', 'Customer', 'Product', 'Skill or function'], correct: 3 },
+      { q: 'The clearest signal a structure needs to change:', options: ['Routine decisions consistently get stuck', 'Headcount growth', 'New office locations', 'CEO change'], correct: 0 },
+      { q: 'Real culture is best described as:', options: ['The values posted on the wall', 'The behaviors that get rewarded', 'The mission statement', 'The dress code'], correct: 1 },
+      { q: 'Divisional org structures trade off:', options: ['Speed for innovation', 'Functional efficiency for outcome focus', 'Diversity for cohesion', 'Quality for cost'], correct: 1 }
+    ],
+    flashcards: [
+      { term: 'Matrix Structure', def: 'Employees report to both a functional manager (skill home) and a project or product lead (work home).' },
+      { term: 'Span of Control', def: 'The number of direct reports per manager. Narrow spans support coaching; wide spans support autonomy.' },
+      { term: 'RACI', def: 'Responsible, Accountable, Consulted, Informed. A framework for clarifying decision-making roles.' },
+      { term: 'Conway\'s Law', def: '"Systems mirror the communication structure of the organization that built them." Org design shapes product design.' },
+      { term: 'Functional Org', def: 'Structure that groups people by skill (engineering, sales, finance). High efficiency, slow cross-team coordination.' },
+      { term: 'Cultural Norms', def: 'The unwritten rules of behavior. Often louder than the stated values.' }
+    ]
+  },
+  {
+    id: 'm4',
+    title: 'Negotiation & Compensation Strategy',
+    subtitle: 'Frameworks for offers, raises, and high-stakes asks.',
+    color: '#6B6B6B',
+    locked: true,
+    slides: [], quiz: [], flashcards: []
+  }
+];
+
+const STORAGE_KEY = 'rallypoint.education.progress.v1';
+const PASS_THRESHOLD = 0.8;
+
+function defaultProgress() {
+  const obj = {};
+  MODULES.forEach(m => { obj[m.id] = { lastSlide: 0, slidesViewed: 0, quizBest: 0, deckMastered: false }; });
+  obj.m1.slidesViewed = 3; obj.m1.lastSlide = 2;
+  obj.m2.slidesViewed = 5; obj.m2.lastSlide = 4; obj.m2.quizBest = 100; obj.m2.deckMastered = true;
+  obj.m3.slidesViewed = 1; obj.m3.lastSlide = 0;
+  return obj;
+}
+let progress = loadProgress();
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultProgress();
+    const parsed = JSON.parse(raw);
+    MODULES.forEach(m => { if (!parsed[m.id]) parsed[m.id] = { lastSlide: 0, slidesViewed: 0, quizBest: 0, deckMastered: false }; });
+    return parsed;
+  } catch { return defaultProgress(); }
+}
+function saveProgress() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch {} }
+
+function moduleProgressPct(m) {
+  if (m.locked) return 0;
+  const p = progress[m.id];
+  const slideFraction = m.slides.length ? p.slidesViewed / m.slides.length : 0;
+  const quizFraction  = p.quizBest >= PASS_THRESHOLD * 100 ? 1 : 0;
+  return Math.round((slideFraction * 0.6 + quizFraction * 0.4) * 100);
+}
+function moduleStatus(m) {
+  if (m.locked) return { label: 'Locked' };
+  const pct = moduleProgressPct(m);
+  if (pct >= 100) return { label: 'Completed' };
+  if (pct > 0)    return { label: 'In Progress' };
+  return { label: 'Not Started' };
+}
+
+// ── RENDER ──
+const ICON_LOCK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M6 9V6a4 4 0 018 0v3"/></svg>';
+
+function renderModules() {
+  const host = document.getElementById('moduleList');
+  host.innerHTML = '';
+  MODULES.forEach(m => {
+    const pct = moduleProgressPct(m);
+    const s   = moduleStatus(m);
+    const tile = document.createElement('div');
+    tile.className = 'module-tile reveal' + (m.locked ? ' locked' : '');
+    tile.style.setProperty('--tile-color', m.color);
+    tile.innerHTML = `
+      <div class="module-tile-strip">
+        ${m.locked
+          ? `<div class="module-tile-strip-lock">${ICON_LOCK}</div>`
+          : `<span class="module-tile-status-pill">${s.label}</span>`}
+      </div>
+      <div class="module-tile-body">
+        <div class="module-tile-title">${m.title}</div>
+        <div class="module-tile-subtitle">${m.subtitle}</div>
+        <div class="module-tile-progress"><div class="module-tile-progress-fill" style="width:${pct}%"></div></div>
+        <div class="module-tile-progress-text">${m.locked ? 'Locked' : pct + '% complete'}</div>
+      </div>
+      <div class="module-tile-actions">
+        <button class="btn btn-primary" ${m.locked ? 'disabled' : `onclick="openSlides('${m.id}')"`}>Open Slides</button>
+        <button class="btn btn-secondary" ${m.locked ? 'disabled' : `onclick="openQuiz('${m.id}')"`}>Take Quiz</button>
+      </div>
+    `;
+    host.appendChild(tile);
+  });
+}
+
+function renderFlashcardRow() {
+  const host = document.getElementById('flashcardRow');
+  host.innerHTML = '';
+  MODULES.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'deck-card' + (m.locked ? ' locked' : '');
+    const mastered = progress[m.id]?.deckMastered;
+    card.innerHTML = `
+      <div>
+        <div class="deck-card-title">${m.title}</div>
+        <div class="deck-card-meta">${m.locked ? 'Locked' : m.flashcards.length + ' cards'}</div>
+      </div>
+      ${mastered ? `<div class="deck-card-badge">✓ Mastered</div>` : ''}
+    `;
+    if (!m.locked) card.onclick = () => openFlashcards(m.id);
+    host.appendChild(card);
+  });
+}
+
+function renderStats() {
+  const total = MODULES.length;
+  const completed = MODULES.filter(m => !m.locked && moduleProgressPct(m) >= 100).length;
+  const quizzes   = MODULES.filter(m => !m.locked && progress[m.id].quizBest >= PASS_THRESHOLD * 100).length;
+  const decks     = MODULES.filter(m => !m.locked && progress[m.id].deckMastered).length;
+  document.getElementById('statModules').textContent = `${completed} / ${total}`;
+  document.getElementById('statQuizzes').textContent = `${quizzes} / ${total}`;
+  document.getElementById('statDecks').textContent   = `${decks} / ${total}`;
+  const overall = Math.round(MODULES.reduce((s, m) => s + moduleProgressPct(m), 0) / total);
+  document.getElementById('overallFill').style.width = overall + '%';
+  document.getElementById('overallPct').textContent  = overall + '%';
+}
+
+function rerender() {
+  renderModules();
+  renderFlashcardRow();
+  renderStats();
+  applyStagger();
+}
+
+// ── STAGGER REVEAL ──
+function applyStagger() {
+  const els = document.querySelectorAll('.reveal:not(.visible)');
+  els.forEach((el, i) => setTimeout(() => el.classList.add('visible'), 80 + i * 90));
+}
+
+// ── SLIDE DECK ──
+let activeModule = null;
+let slideIndex = 0;
+
+function openSlides(moduleId) {
+  activeModule = MODULES.find(m => m.id === moduleId);
+  if (!activeModule || activeModule.locked) return;
+  slideIndex = Math.min(progress[moduleId].lastSlide || 0, activeModule.slides.length - 1);
+  renderSlide();
+  openModal('slideModal');
+}
+function renderSlide() {
+  const s = activeModule.slides[slideIndex];
+  document.getElementById('slideBody').innerHTML = `
+    <div class="slide-eyebrow">${s.eyebrow}</div>
+    <div class="slide-headline">${s.headline}</div>
+    <div class="slide-text">${s.body}</div>
+    ${s.callout ? `<div class="slide-callout">${s.callout}</div>` : ''}
+  `;
+  document.getElementById('slideCounter').textContent = `${slideIndex + 1} / ${activeModule.slides.length}`;
+  document.getElementById('slidePrev').disabled = slideIndex === 0;
+  document.getElementById('slideNext').disabled = slideIndex === activeModule.slides.length - 1;
+}
+function navSlide(dir) {
+  const next = slideIndex + dir;
+  if (next < 0 || next >= activeModule.slides.length) return;
+  slideIndex = next;
+  const p = progress[activeModule.id];
+  p.lastSlide = slideIndex;
+  p.slidesViewed = Math.max(p.slidesViewed, slideIndex + 1);
+  saveProgress();
+  renderSlide();
+  rerender();
+}
+function downloadSlides() { window.print(); }
+
+// ── QUIZ ──
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+function openQuiz(moduleId) {
+  activeModule = MODULES.find(m => m.id === moduleId);
+  if (!activeModule || activeModule.locked) return;
+  quizIndex = 0;
+  quizScore = 0;
+  renderQuizQuestion();
+  openModal('quizModal');
+}
+function renderQuizQuestion() {
+  const q = activeModule.quiz[quizIndex];
+  quizAnswered = false;
+  document.getElementById('quizProgressFill').style.width = ((quizIndex) / activeModule.quiz.length * 100) + '%';
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-q-num">Question ${quizIndex + 1} of ${activeModule.quiz.length}</div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">
+      ${q.options.map((opt, i) => `
+        <button class="quiz-option" data-i="${i}" onclick="answerQuiz(${i})">
+          <span class="quiz-option-letter">${String.fromCharCode(65 + i)}</span>
+          <span>${opt}</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+function answerQuiz(i) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = activeModule.quiz[quizIndex];
+  const options = document.querySelectorAll('.quiz-option');
+  options.forEach(o => o.disabled = true);
+  options[q.correct].classList.add('correct');
+  if (i !== q.correct) options[i].classList.add('wrong');
+  if (i === q.correct) quizScore++;
+  setTimeout(() => {
+    if (quizIndex < activeModule.quiz.length - 1) {
+      quizIndex++;
+      renderQuizQuestion();
+    } else {
+      renderQuizResult();
+    }
+  }, 1100);
+}
+function renderQuizResult() {
+  const total = activeModule.quiz.length;
+  const pct = Math.round(quizScore / total * 100);
+  const passed = pct >= PASS_THRESHOLD * 100;
+  document.getElementById('quizProgressFill').style.width = '100%';
+  const p = progress[activeModule.id];
+  p.quizBest = Math.max(p.quizBest, pct);
+  saveProgress();
+  document.getElementById('quizBody').innerHTML = `
+    <div class="quiz-result">
+      <div class="quiz-score">${pct}%</div>
+      <div class="quiz-score-label">${quizScore} of ${total} correct</div>
+      <div class="quiz-result-message">${passed ? 'Module mastered.' : 'Almost there — give it another go.'}</div>
+      <div class="quiz-result-detail">${passed ? 'You\'ve passed the threshold to mark this module complete.' : 'You need ' + Math.ceil(total * PASS_THRESHOLD) + ' correct to pass.'}</div>
+      <div class="quiz-result-actions">
+        <button class="btn btn-primary" onclick="closeModal('quizModal'); rerender();">Continue</button>
+        <button class="btn btn-secondary" onclick="openQuiz('${activeModule.id}')">Retake</button>
+      </div>
+    </div>
+  `;
+  rerender();
+}
+
+// ── FLASHCARDS ──
+let cardIndex = 0;
+function openFlashcards(moduleId) {
+  activeModule = MODULES.find(m => m.id === moduleId);
+  if (!activeModule || activeModule.locked) return;
+  cardIndex = 0;
+  document.getElementById('flashcardDeckTitle').textContent = activeModule.title + ' — Deck';
+  renderCard();
+  openModal('flashcardModal');
+}
+function renderCard() {
+  const c = activeModule.flashcards[cardIndex];
+  document.getElementById('flashcardFlipper').classList.remove('flipped');
+  setTimeout(() => {
+    document.getElementById('flashcardTerm').textContent = c.term;
+    document.getElementById('flashcardDef').textContent  = c.def;
+  }, 100);
+  document.getElementById('flashcardCounter').textContent = `${cardIndex + 1} / ${activeModule.flashcards.length}`;
+  document.getElementById('flashcardPrev').disabled = cardIndex === 0;
+  const next = document.getElementById('flashcardNext');
+  next.disabled = false;
+  next.textContent = cardIndex === activeModule.flashcards.length - 1 ? '✓' : '›';
+}
+function flipCard() { document.getElementById('flashcardFlipper').classList.toggle('flipped'); }
+function navCard(dir) {
+  const next = cardIndex + dir;
+  if (next < 0) return;
+  if (next >= activeModule.flashcards.length) {
+    progress[activeModule.id].deckMastered = true;
+    saveProgress();
+    closeModal('flashcardModal');
+    rerender();
+    return;
+  }
+  cardIndex = next;
+  renderCard();
+}
+
+// ── MODAL CORE ──
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ── TOUCH SWIPE on slide deck ──
+const slideModalEl = document.getElementById('slideModal');
+let touchStartX = 0;
+let touchStartY = 0;
+slideModalEl.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+slideModalEl.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].screenX - touchStartX;
+  const dy = e.changedTouches[0].screenY - touchStartY;
+  // horizontal swipe (filter out vertical scrolls)
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) navSlide(1);
+    else navSlide(-1);
+  }
+}, { passive: true });
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', rerender);
+</script>
+</body>
+</html>
