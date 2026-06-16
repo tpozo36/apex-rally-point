@@ -482,7 +482,7 @@ body {
     background: var(--charcoal);
     border-top: 1px solid rgba(255,255,255,0.08);
     justify-content: space-around;
-    align-items: center;
+    align-items: stretch;
     z-index: 200;
   }
 
@@ -491,9 +491,12 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 2px;
     color: #888;
     text-decoration: none;
-    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     flex: 1;
     height: 100%;
     cursor: pointer;
@@ -501,23 +504,9 @@ body {
     border: none;
     transition: color 0.15s;
   }
-  .bottom-nav-item:hover,
+  .bottom-nav-item:active,
   .bottom-nav-item.active { color: var(--blue); }
   .bottom-nav-item svg { width: 22px; height: 22px; }
-
-  .bottom-nav-post {
-    background: var(--blue);
-    color: #fff;
-    border-radius: 14px;
-    width: 44px; height: 44px;
-    display: flex; align-items: center; justify-content: center;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: opacity 0.15s;
-  }
-  .bottom-nav-post:hover { opacity: 0.85; }
-  .bottom-nav-post svg { width: 20px; height: 20px; }
 }
 </style>
 </head>
@@ -881,18 +870,23 @@ body {
 <nav class="bottom-nav">
   <a class="bottom-nav-item active" href="#">
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10L10 3l7 7"/><path d="M5 8.5V17h4v-4h2v4h4V8.5"/></svg>
+    Home
   </a>
   <a class="bottom-nav-item" href="#">
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="6"/><line x1="13.5" y1="13.5" x2="17" y2="17"/></svg>
+    Search
   </a>
-  <button class="bottom-nav-post">
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
-  </button>
+  <a class="bottom-nav-item" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="10" y1="4" x2="10" y2="16"/><line x1="4" y1="10" x2="16" y2="10"/></svg>
+    Post
+  </a>
   <a class="bottom-nav-item" href="#">
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="7" r="4"/><path d="M3 17c0-3.314 3.134-6 7-6s7 2.686 7 6"/></svg>
+    Profile
   </a>
   <a class="bottom-nav-item" href="education-mobile.html">
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M1 7l9-4 9 4-9 4-9-4z"/><path d="M5 9v4c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5V9"/></svg>
+    Education
   </a>
 </nav>
 
