@@ -108,7 +108,7 @@ body {
 }
 .feed-col {
   width: 100%;
-  max-width: 720px;
+  max-width: 1080px;
   padding: 0 0 80px;
 }
 
@@ -181,75 +181,138 @@ body {
   font-weight: 500;
 }
 
-/* MODULE CARDS — same width/feel as feed post cards */
-.module-card {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
+/* MODULE TILES — Canvas-style dashboard grid */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  padding: 22px 0 6px;
+}
+.module-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.module-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.07);
+}
+.module-tile-strip {
+  height: 110px;
+  background: var(--tile-color, var(--blue));
   position: relative;
 }
-.module-card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-.module-title {
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.1px;
-  color: var(--text);
-}
-.module-subtitle {
-  font-size: 13px;
-  color: var(--text-2);
-  margin-top: 3px;
-}
-.module-status {
+.module-tile-status-pill {
+  position: absolute;
+  top: 10px; left: 12px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  background: rgba(255,255,255,0.92);
+  color: var(--tile-color, var(--blue));
   padding: 4px 9px;
   border-radius: 4px;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
-.status-not-started { background: #F0F0F0; color: var(--charcoal-mid); }
-.status-in-progress { background: var(--blue-light); color: var(--blue); }
-.status-completed   { background: #E4F5EC; color: var(--green); }
-.status-locked      { background: #F0F0F0; color: var(--text-3); }
-
-.module-progress-row {
+.module-tile-strip-lock {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 10px 0 14px;
+  justify-content: center;
+  color: rgba(255,255,255,0.92);
 }
-.module-progress-bar {
+.module-tile-strip-lock svg { width: 34px; height: 34px; }
+.module-tile-body {
+  padding: 16px 18px 14px;
   flex: 1;
-  height: 6px;
-  background: var(--border);
-  border-radius: 4px;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
-.module-progress-fill {
+.module-tile-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.1px;
+  color: var(--tile-color, var(--blue));
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+.module-tile-subtitle {
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.4;
+  margin-bottom: 12px;
+  flex: 1;
+}
+.module-tile-progress {
+  height: 4px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.module-tile-progress-fill {
   height: 100%;
-  background: var(--blue);
-  border-radius: 4px;
+  background: var(--tile-color, var(--blue));
   transition: width 0.6s cubic-bezier(.4,.0,.2,1);
 }
-.module-progress-pct {
+.module-tile-progress-text {
   font-size: 12px;
-  font-weight: 700;
-  color: var(--text-2);
-  min-width: 36px;
-  text-align: right;
+  color: var(--text-3);
+  font-weight: 600;
 }
-.module-actions {
+.module-tile-footer {
   display: flex;
-  gap: 8px;
+  gap: 4px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
 }
+.tile-icon-btn {
+  background: none;
+  border: none;
+  width: 36px; height: 36px;
+  border-radius: 6px;
+  color: var(--text-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+  position: relative;
+  font-family: inherit;
+}
+.tile-icon-btn:hover:not(:disabled) {
+  background: rgba(0,0,0,0.05);
+  color: var(--charcoal);
+}
+.tile-icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.tile-icon-btn svg { width: 18px; height: 18px; }
+.tile-icon-badge {
+  position: absolute;
+  top: 1px; right: 1px;
+  background: var(--charcoal);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 9px;
+  min-width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.module-tile.locked .module-tile-title,
+.module-tile.locked .module-tile-progress-text { color: var(--text-3); }
+.module-tile.locked .module-tile-progress-fill { background: var(--text-3); }
+.module-tile.locked:hover { transform: none; box-shadow: none; }
+
+/* Buttons reused by quiz/result actions */
 .btn {
   border: none;
   border-radius: 20px;
@@ -265,19 +328,6 @@ body {
 .btn-secondary { background: var(--charcoal); color: #fff; }
 .btn-secondary:hover { opacity: 0.85; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-
-.module-card.locked .module-title,
-.module-card.locked .module-subtitle { color: var(--text-3); }
-.module-card.locked .module-progress-fill { background: var(--text-3); }
-.lock-icon {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--text-3);
-  font-weight: 600;
-}
-.lock-icon svg { width: 16px; height: 16px; }
 
 /* FLASHCARD ROW */
 .section-heading {
@@ -773,8 +823,8 @@ body {
       </div>
     </div>
 
-    <!-- MODULE CARDS — rendered by JS -->
-    <div id="moduleList"></div>
+    <!-- MODULE TILES — rendered by JS -->
+    <div class="module-grid" id="moduleList"></div>
 
     <!-- FLASHCARD ROW -->
     <h2 class="section-heading reveal">Flashcard Decks</h2>
@@ -846,6 +896,7 @@ const MODULES = [
     id: 'm1',
     title: 'Corporate Finance Fundamentals',
     subtitle: 'Read a P&L, balance sheet, and cash flow with confidence.',
+    color: '#1B5FAD',
     locked: false,
     slides: [
       {
@@ -902,6 +953,7 @@ const MODULES = [
     id: 'm2',
     title: 'Business Communication & Presence',
     subtitle: 'Speak so you get heard, write so you get read.',
+    color: '#B5451B',
     locked: false,
     slides: [
       {
@@ -953,6 +1005,7 @@ const MODULES = [
     id: 'm3',
     title: 'Organizational Structure & Culture',
     subtitle: 'Read the wiring of any company in the first 30 days.',
+    color: '#2D6A4F',
     locked: false,
     slides: [
       {
@@ -1003,6 +1056,7 @@ const MODULES = [
     id: 'm4',
     title: 'Negotiation & Compensation Strategy',
     subtitle: 'Frameworks for offers, raises, and high-stakes asks.',
+    color: '#6B6B6B',
     locked: true,
     slides: [],
     quiz: [],
@@ -1059,39 +1113,43 @@ function moduleStatus(m) {
 }
 
 // ── RENDER ──
+const ICON_SLIDES = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="3" width="16" height="11" rx="1.5"/><path d="M6 11l3-3 2 2 3-3"/><line x1="6" y1="17" x2="14" y2="17"/></svg>';
+const ICON_QUIZ   = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="4" y="3" width="12" height="15" rx="1.5"/><rect x="7.5" y="1.5" width="5" height="3" rx="0.8" fill="currentColor" stroke="none"/><line x1="7" y1="9" x2="13" y2="9"/><line x1="7" y1="12" x2="13" y2="12"/><line x1="7" y1="15" x2="10.5" y2="15"/></svg>';
+const ICON_CARDS  = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="6" width="12" height="10" rx="1.5"/><rect x="5.5" y="3" width="12" height="10" rx="1.5"/></svg>';
+const ICON_LOCK   = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M6 9V6a4 4 0 018 0v3"/></svg>';
+
 function renderModules() {
   const host = document.getElementById('moduleList');
   host.innerHTML = '';
   MODULES.forEach((m, i) => {
     const pct = moduleProgressPct(m);
     const s   = moduleStatus(m);
-    const card = document.createElement('div');
-    card.className = 'module-card reveal' + (m.locked ? ' locked' : '');
-    card.innerHTML = `
-      <div class="module-card-top">
-        <div>
-          <div class="module-title">${m.title}</div>
-          <div class="module-subtitle">${m.subtitle}</div>
-        </div>
-        <div class="module-status ${s.cls}">${s.label}</div>
+    const tile = document.createElement('div');
+    tile.className = 'module-tile reveal' + (m.locked ? ' locked' : '');
+    tile.style.setProperty('--tile-color', m.color);
+    const p = progress[m.id];
+    const quizBadge = !m.locked && p.quizBest > 0 ? `<span class="tile-icon-badge">${p.quizBest}%</span>` : '';
+    const deckBadge = !m.locked && p.deckMastered ? `<span class="tile-icon-badge">✓</span>` : '';
+
+    tile.innerHTML = `
+      <div class="module-tile-strip">
+        ${m.locked
+          ? `<div class="module-tile-strip-lock">${ICON_LOCK}</div>`
+          : `<span class="module-tile-status-pill">${s.label}</span>`}
       </div>
-      <div class="module-progress-row">
-        <div class="module-progress-bar"><div class="module-progress-fill" style="width:${pct}%"></div></div>
-        <div class="module-progress-pct">${pct}%</div>
+      <div class="module-tile-body">
+        <div class="module-tile-title">${m.title}</div>
+        <div class="module-tile-subtitle">${m.subtitle}</div>
+        <div class="module-tile-progress"><div class="module-tile-progress-fill" style="width:${pct}%"></div></div>
+        <div class="module-tile-progress-text">${m.locked ? 'Locked' : pct + '% complete'}</div>
       </div>
-      <div class="module-actions">
-        ${m.locked ? `
-          <span class="lock-icon">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M6 9V6a4 4 0 018 0v3"/></svg>
-            Complete prior modules to unlock
-          </span>
-        ` : `
-          <button class="btn btn-primary" onclick="openSlides('${m.id}')">Open Slides</button>
-          <button class="btn btn-secondary" onclick="openQuiz('${m.id}')">Take Quiz</button>
-        `}
+      <div class="module-tile-footer">
+        <button class="tile-icon-btn" title="Open Slides" ${m.locked ? 'disabled' : `onclick="openSlides('${m.id}')"`}>${ICON_SLIDES}</button>
+        <button class="tile-icon-btn" title="Take Quiz" ${m.locked ? 'disabled' : `onclick="openQuiz('${m.id}')"`}>${ICON_QUIZ}${quizBadge}</button>
+        <button class="tile-icon-btn" title="Flashcards" ${m.locked ? 'disabled' : `onclick="openFlashcards('${m.id}')"`}>${ICON_CARDS}${deckBadge}</button>
       </div>
     `;
-    host.appendChild(card);
+    host.appendChild(tile);
   });
 }
 
