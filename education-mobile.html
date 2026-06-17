@@ -212,6 +212,8 @@ body {
 .btn-primary:active { opacity: 0.85; }
 .btn-secondary { background: var(--charcoal); color: #fff; }
 .btn-secondary:active { opacity: 0.85; }
+.btn-ghost { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:active { background: rgba(0,0,0,0.04); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .module-tile.locked .module-tile-title,
 .module-tile.locked .module-tile-progress-text { color: var(--text-3); }
@@ -226,61 +228,67 @@ body {
   margin: 24px 0 12px;
   color: var(--text);
 }
-.flashcard-row {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  padding: 4px 0 14px;
-  scroll-snap-type: x mandatory;
-  scroll-padding: 0 16px;
-  margin: 0 -16px;
-  padding-left: 16px;
-  padding-right: 16px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-.flashcard-row::-webkit-scrollbar { display: none; }
-.deck-card {
-  flex: 0 0 calc(100% - 0px);
-  min-height: 160px;
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
-  padding: 18px 20px;
-  cursor: pointer;
+/* UP NEXT — next action per unlocked, in-progress module */
+.up-next-list {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  scroll-snap-align: start;
+  gap: 10px;
 }
-.deck-card-title {
-  font-size: 17px;
-  font-weight: 800;
+.up-next-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
+}
+.up-next-item:active {
+  border-color: var(--blue);
+  background: rgba(27,143,252,0.04);
+}
+.up-next-item-icon {
+  width: 40px; height: 40px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.up-next-item-icon svg { width: 20px; height: 20px; }
+.up-next-item-body { flex: 1; min-width: 0; }
+.up-next-item-title {
+  font-size: 15px;
+  font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.1px;
+  letter-spacing: -0.05px;
   line-height: 1.3;
 }
-.deck-card-meta {
+.up-next-item-sub {
   font-size: 13px;
   color: var(--text-2);
-  margin-top: 8px;
+  margin-top: 3px;
 }
-.deck-card-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--green);
-  background: #E4F5EC;
-  padding: 4px 10px;
-  border-radius: 4px;
-  align-self: flex-start;
-  margin-top: 12px;
+.up-next-item-arrow {
+  color: var(--text-3);
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
 }
-.deck-card.locked { background: #F5F4EF; cursor: not-allowed; }
-.deck-card.locked .deck-card-title,
-.deck-card.locked .deck-card-meta { color: var(--text-3); }
+.up-next-empty {
+  text-align: center;
+  color: var(--text-2);
+  padding: 28px 16px;
+  font-size: 14px;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
 
 /* BOTTOM NAV */
 .bottom-nav {
@@ -689,8 +697,8 @@ body {
   <div class="module-list" id="moduleList"></div>
 
   <!-- FLASHCARD ROW -->
-  <h2 class="section-heading reveal">Flashcard Decks</h2>
-  <div class="flashcard-row reveal" id="flashcardRow"></div>
+  <h2 class="section-heading reveal">Up Next</h2>
+  <div class="up-next-list reveal" id="upNextList"></div>
 
 </div>
 
@@ -915,7 +923,10 @@ function moduleStatus(m) {
 }
 
 // ── RENDER ──
-const ICON_LOCK = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M6 9V6a4 4 0 018 0v3"/></svg>';
+const ICON_LOCK   = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="9" width="14" height="9" rx="2"/><path d="M6 9V6a4 4 0 018 0v3"/></svg>';
+const ICON_SLIDES = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="3" width="16" height="11" rx="1.5"/><path d="M6 11l3-3 2 2 3-3"/><line x1="6" y1="17" x2="14" y2="17"/></svg>';
+const ICON_QUIZ   = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="4" y="3" width="12" height="15" rx="1.5"/><rect x="7.5" y="1.5" width="5" height="3" rx="0.8" fill="currentColor" stroke="none"/><line x1="7" y1="9" x2="13" y2="9"/><line x1="7" y1="12" x2="13" y2="12"/><line x1="7" y1="15" x2="10.5" y2="15"/></svg>';
+const ICON_CARDS  = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="6" width="12" height="10" rx="1.5"/><rect x="5.5" y="3" width="12" height="10" rx="1.5"/></svg>';
 
 function renderModules() {
   const host = document.getElementById('moduleList');
@@ -941,28 +952,68 @@ function renderModules() {
       <div class="module-tile-actions">
         <button class="btn btn-primary" ${m.locked ? 'disabled' : `onclick="openSlides('${m.id}')"`}>Open Slides</button>
         <button class="btn btn-secondary" ${m.locked ? 'disabled' : `onclick="openQuiz('${m.id}')"`}>Take Quiz</button>
+        <button class="btn btn-ghost" ${m.locked ? 'disabled' : `onclick="openFlashcards('${m.id}')"`}>Flashcards</button>
       </div>
     `;
     host.appendChild(tile);
   });
 }
 
-function renderFlashcardRow() {
-  const host = document.getElementById('flashcardRow');
-  host.innerHTML = '';
-  MODULES.forEach(m => {
-    const card = document.createElement('div');
-    card.className = 'deck-card' + (m.locked ? ' locked' : '');
-    const mastered = progress[m.id]?.deckMastered;
-    card.innerHTML = `
-      <div>
-        <div class="deck-card-title">${m.title}</div>
-        <div class="deck-card-meta">${m.locked ? 'Locked' : m.flashcards.length + ' cards'}</div>
+// Build "Up Next": next action per unlocked, incomplete module.
+function renderUpNext() {
+  const host = document.getElementById('upNextList');
+  const items = [];
+
+  for (const m of MODULES) {
+    if (m.locked) continue;
+    const p = progress[m.id];
+
+    if (p.slidesViewed < m.slides.length) {
+      const at = Math.min(p.slidesViewed + 1, m.slides.length);
+      items.push({
+        color: m.color,
+        title: `Continue ${m.title}`,
+        sub: `Slide ${at} of ${m.slides.length}`,
+        icon: ICON_SLIDES,
+        action: () => openSlides(m.id),
+      });
+    } else if (p.quizBest < PASS_THRESHOLD * 100) {
+      items.push({
+        color: m.color,
+        title: `Take quiz: ${m.title}`,
+        sub: p.quizBest > 0 ? `Best score ${p.quizBest}% — give it another try` : `${m.quiz.length} questions`,
+        icon: ICON_QUIZ,
+        action: () => openQuiz(m.id),
+      });
+    } else if (!p.deckMastered) {
+      items.push({
+        color: m.color,
+        title: `Review ${m.title} flashcards`,
+        sub: `${m.flashcards.length} cards`,
+        icon: ICON_CARDS,
+        action: () => openFlashcards(m.id),
+      });
+    }
+  }
+
+  if (items.length === 0) {
+    host.innerHTML = `<div class="up-next-empty">You're all caught up — nice work.</div>`;
+    return;
+  }
+
+  host.innerHTML = items.map((it, i) => `
+    <button class="up-next-item" data-i="${i}">
+      <div class="up-next-item-icon" style="background:${it.color}15;color:${it.color}">${it.icon}</div>
+      <div class="up-next-item-body">
+        <div class="up-next-item-title">${it.title}</div>
+        <div class="up-next-item-sub">${it.sub}</div>
       </div>
-      ${mastered ? `<div class="deck-card-badge">✓ Mastered</div>` : ''}
-    `;
-    if (!m.locked) card.onclick = () => openFlashcards(m.id);
-    host.appendChild(card);
+      <div class="up-next-item-arrow">›</div>
+    </button>
+  `).join('');
+
+  host.querySelectorAll('.up-next-item').forEach((btn, i) => {
+    btn.addEventListener('click', items[i].action);
   });
 }
 
@@ -981,7 +1032,7 @@ function renderStats() {
 
 function rerender() {
   renderModules();
-  renderFlashcardRow();
+  renderUpNext();
   renderStats();
   applyStagger();
 }
